@@ -14,35 +14,11 @@
 
 char	*get_next_line(int fd);
 
-void	*ft_calloc(size_t n, size_t size)
-{
-	void	*v;
-
-	v = malloc(n * size);
-	if (!v)
-		return (0);
-	return (ft_memset(v, 0, n * size));
-}
-
-void	*ft_memset(void *s, int c, size_t n)
-{
-	char	*str;
-	size_t	i;
-
-	str = (char *)s;
-	i = 0;
-	while (i < n)
-		str[i++] = c;
-	return (s);
-}
-
-int	read_line(char **line, int fd)
+int	read_line(char **line, int fd, int i)
 {
 	char	*tmp;
 	char	buffer[BUFFER_SIZE + 1];
-	int		i;
 
-	i = 1;
 	while (!ft_strchr(*line, '\n') && i)
 	{
 		i = read(fd, buffer, BUFFER_SIZE);
@@ -67,6 +43,27 @@ int	read_line(char **line, int fd)
 	return (1);
 }
 
+int	read_buffer(char *buffer)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n')
+		i++;
+	return (i);
+}
+
+void	free_buffer(char **buffer)
+{
+	if (*buffer)
+	{
+		free(*buffer);
+		*buffer = NULL;
+	}
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
@@ -76,25 +73,15 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 	{
-		if (buffer)
-		{
-			free(buffer);
-			buffer = NULL;
-		}
+		free_buffer(&buffer);
 		return (NULL);
 	}
-	if (!buffer)
-		buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!read_line(&buffer, fd))
+	if (!read_line(&buffer, fd, 1))
 	{
 		free(buffer);
 		return (NULL);
 	}
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
+	i = read_buffer(buffer);
 	str = ft_strlendup(buffer, i);
 	if (!str)
 		return (NULL);
@@ -105,3 +92,13 @@ char	*get_next_line(int fd)
 	free(tmp);
 	return (str);
 }
+
+//int main(void)
+//{
+//	int fd = open("text.txt", O_RDONLY);
+//	char *c;
+//
+//	c = get_next_line(fd);
+//	printf("%s\n", c);
+//}
+
