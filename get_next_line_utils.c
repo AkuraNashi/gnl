@@ -12,19 +12,6 @@
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if ((char)c == *s)
-			return ((char *)s);
-		s++;
-	}
-	if ((char)c == 0)
-		return ((char *)s);
-	return (0);
-}
-
 size_t	ft_strlen(const char *s)
 {
 	int	i;
@@ -33,6 +20,43 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+char	*ft_strlenjoin(const char *s1, const char *s2, int len)
+{
+	char	*str;
+	char	*ret;
+
+	if (!(s1 && s2))
+		return (0);
+	str = malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	ret = str;
+	if (!str)
+		return (0);
+	while (*s1)
+		*(str++) = *(s1++);
+	while (len > 0)
+	{
+		*(str++) = *(s2++);
+		len--;
+	}
+	*str = 0;
+	return (ret);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	if (!s)
+		return (0);
+	while (*s)
+	{
+		if (*s == ((char)c))
+			return ((char *)s);
+		s++;
+	}
+	if (c == 0)
+		return ((char *)s);
+	return (0);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -52,41 +76,13 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (ft_strlen(src));
 }
 
-char	*ft_strlendup(const char *s, int i)
+char	*ft_strlendup(const char *s1, int size)
 {
-	char	*string;
+	char	*p;
 
-	string = malloc( (i + 1 )* sizeof(char) + 1);
-	if (!string)
+	p = malloc((size + 1) * sizeof(char));
+	if (!p)
 		return (0);
-	ft_strlcpy(string, s, i + 1);
-	return (string);
-}
-
-char	*ft_strlenjoin(char const *s1, char const *s2, int size)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	i = ft_strlen(s1) + size;
-	str = malloc(i + 1 * sizeof(char));
-	if (!str)
-		return (0);
-	j = 0;
-	while (s1[j] && size)
-	{
-		str[j] = s1[j];
-		j++;
-		size--;
-	}
-	i = 0;
-	while (s2[i] && size)
-	{
-		str[j + i] = s2[i];
-		i++;
-		size--;
-	}
-	str[j + i] = 0;
-	return (str);
+	ft_strlcpy(p, s1, size + 1);
+	return (p);
 }
