@@ -1,8 +1,0 @@
-# ninja log v5
-0	53	1666893411000000000	CMakeFiles/gnl.dir/get_next_line_utils.c.o	57ef1952738dc1cf
-0	99	1666910150000000000	CMakeFiles/gnl.dir/get_next_line.c.o	b498e96b7dbe845c
-1	111	1666910150000000000	CMakeFiles/gnl.dir/get_next_line_utils.c.o	57ef1952738dc1cf
-111	176	1666910150000000000	gnl	e51f4d15f97faa31
-1	71	1666910191000000000	CMakeFiles/gnl.dir/get_next_line.c.o	b498e96b7dbe845c
-1	80	1666910191000000000	CMakeFiles/gnl.dir/get_next_line_utils.c.o	57ef1952738dc1cf
-80	138	1666910191000000000	gnl	e51f4d15f97faa31

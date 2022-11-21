@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -25,7 +25,7 @@
 //gnl.c
 char	*get_next_line(int fd);
 int		read_buffer(char *buffer);
-void	free_buffer(char **buffer);
+void	free_buffer(char **buffer, int fd);
 int		read_line(char **line, int fd, int i);
 //gnl_utils.c
 char	*ft_strchr(const char *s, int c);

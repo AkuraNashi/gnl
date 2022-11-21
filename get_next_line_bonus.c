@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd);
 
@@ -19,24 +19,24 @@ int	read_line(char **line, int fd, int i)
 	char	*tmp;
 	char	buffer[BUFFER_SIZE + 1];
 
-	while (!ft_strchr(*line, '\n') && i)
+	while (!ft_strchr(line[fd], '\n') && i)
 	{
 		i = read(fd, buffer, BUFFER_SIZE);
-		if (i && !*line)
+		if (i && !line[fd])
 		{
 			buffer[i] = 0;
-			*line = ft_strlendup(buffer, i);
+			line[fd] = ft_strlendup(buffer, i);
 		}
 		else if (i)
 		{
-			tmp = *line;
-			*line = ft_strlenjoin(tmp, buffer, i);
+			tmp = line[fd];
+			line[fd] = ft_strlenjoin(tmp, buffer, i);
 			free(tmp);
 		}
-		if (!*line || (!*line[0] && !i))
+		if (!line[fd] || (!line[fd][0] && !i))
 		{
-			free(*line);
-			*line = NULL;
+			free(line[fd]);
+			line[fd] = NULL;
 			return (0);
 		}
 	}
@@ -55,39 +55,39 @@ int	read_buffer(char *buffer)
 	return (i);
 }
 
-void	free_buffer(char **buffer)
+void	free_buffer(char **buffer, int fd)
 {
-	if (*buffer)
+	if (buffer[fd])
 	{
-		free(*buffer);
-		*buffer = NULL;
+		free(buffer[fd]);
+		buffer[fd] = NULL;
 	}
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[4096];
 	char		*tmp;
 	char		*str;
 	int			i;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 	{
-		free_buffer(&buffer);
+		free_buffer(buffer, fd);
 		return (NULL);
 	}
-	if (!read_line(&buffer, fd, 1))
+	if (!read_line(buffer, fd, 1))
 	{
-		free(buffer);
+		free(buffer[fd]);
 		return (NULL);
 	}
-	i = read_buffer(buffer);
-	str = ft_strlendup(buffer, i);
+	i = read_buffer(buffer[fd]);
+	str = ft_strlendup(buffer[fd], i);
 	if (!str)
 		return (NULL);
-	tmp = buffer;
-	buffer = ft_strlendup(tmp + i, ft_strlen(tmp + i));
-	if (!buffer)
+	tmp = buffer[fd];
+	buffer[fd] = ft_strlendup(tmp + i, ft_strlen(tmp + i));
+	if (!buffer[fd])
 		return (NULL);
 	free(tmp);
 	return (str);
